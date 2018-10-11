@@ -1,0 +1,20 @@
+version: '2'
+services:
+  lb:
+    image: dockercloud/haproxy:1.6.6
+    environment:
+      - ADDITIONAL_BACKEND_DASHBOARDAPI=balance source, server 172.27.131.232:3333
+      - ADDITIONAL_BACKEND_DASHBOARDWEB=balance source, server 172.27.131.232:8888
+      - EXTRA_FRONTEND_SETTINGS_8888=balance source, maxconn 2000 
+      - EXTRA_FRONTEND_SETTINGS_3333=balance source, maxconn 2000
+      - TCP_PORTS=8888,3333,80,443,1936
+      - VIRTUAL_HOST=http://172.27.131.232:8888/*
+      - VIRTUAL_HOST=http://172.27.131.232:3333/*
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 80:80
+      - 3333:3333
+      - 8888:8888
+      - 443:443
+      - 1936:1936

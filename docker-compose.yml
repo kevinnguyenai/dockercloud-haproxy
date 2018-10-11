@@ -1,0 +1,18 @@
+version: '2'
+services:
+  web:
+    image: dockercloud/hello-world
+  blog:
+    image: dockercloud/hello-world
+  lb:
+    image: dockercloud/haproxy
+    depends_on:
+      - web
+      - blog
+    environment:
+      - ADDITIONAL_SERVICES=project_dir:web,project_dir:blog
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 80:80
+      - 1936:1936
